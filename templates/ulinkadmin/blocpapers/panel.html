@@ -1,0 +1,31 @@
+{% load static %}
+<header class="slidePanel-header bg-blue-600" style="padding-bottom:0px" >
+  <div class="slidePanel-actions" aria-label="actions" role="group">
+    <button type="button" class="btn btn-pure btn-inverse slidePanel-close actions-top icon wb-close"
+      aria-hidden="true"></button>
+  </div>
+  <h1>{{ model.paperNumber }}</h1>
+  <p>{{ model.issuer }}</p>
+</header>
+<div class="slidePanel-inner">
+  <!--Workflow here -->
+  {% include 'ulinkadmin/widget/workflowPublic.html' with utilisateur=utilisateur model=model historique=model.transactions roles=roles csrf_token=csrf_token only %}
+  <!--Workflow here -->
+  <div class="slidePanel-footer">
+    <div class="mail-attachments">
+        <p><i Class="icon wb-paperclip"></i>Pièces jointes | <a href="javascript:void(0)"> Télécharger</a></p>
+        <ul class="list-group">
+          {% for item in model.files %}
+          <li class="list-group-item">
+            <span class="name">{{ item.docHash.created_at|date:'M d, Y H:i' }}</span>
+            <span class="size">(Etape: {{ item.valueTxn }})</span>
+            <button type="submit" class="btn btn-icon btn-pure btn-default" onclick="window.open('/static{{item.docHash.privateUrlDocument}}')" ><i class="icon wb-download" aria-hidden="true"></i></button>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="slidePanel-comment">
+        <button class="btn btn-danger slidePanel-close" data-dismiss="modal" type="button">Fermer</button>
+      </div>
+  </div>
+</div>

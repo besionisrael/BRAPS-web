@@ -1,0 +1,30 @@
+{% load static %}
+
+  <div class="row row-lg">
+    <!-- Panel -->
+    <div class="col-lg-12">
+      <!-- Example Vertical -->
+      <div class="example-wrap">
+        <h4 class="example-title">Workflow public: Suivi de progression</h4>
+        <div class="example">
+          <div class="steps steps-vertical">
+            {% for item in historique %}
+            <div class="step {% if item.txn == model.currentState %} current {% endif %}">
+              <span class="step-number">{{ item.txn}}</span>
+              <div class="step-desc">
+                <span class="step-title">{{ item.valueTxn }}</span>
+                <p>{{ item.newOperator }} </p>
+                <p>{{ item.createdAt|date:'M d, Y H:i' }} </p>
+                <p>{{ item.hashTx }} </p>
+              </div>
+            </div>
+            {% endfor %}  
+          </div>
+        </div>
+      </div>
+      <!-- End Example Vertical -->
+    </div>
+    <!-- End Panel -->
+
+  </div>
+  

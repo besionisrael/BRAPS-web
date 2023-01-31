@@ -1,0 +1,54 @@
+{% load static %}
+
+  <div class="row row-lg">
+    <!-- Panel -->
+    <div class="col-lg-12">
+      <div class="example-wrap m-md-0">
+        <p style="color: #37474f">Suivi de progression workfow.</p>
+        <div class="example">
+          <div class="steps row steps-xs">
+            {% for item in historique %}
+            <div class="step col-md-4 {% if item.workflowState == model.currentState %} current {% endif %}">
+              <span class="step-number">{{ item.workflowState }}</span>
+                <div class="step-desc">
+                  <a  title="Date : {{ item.created_at|date:'M d, Y H:i'}}"href="#">
+                    <span class="step-title">{{item.valueWorkflowState}}</span>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}  
+          </div>
+        </div>
+      </div>
+      <div class="card-block">
+        {% if model.currentState == 1 %}  <!-- Created, waiting for Issuing -->
+            <form method="POST" action="{% url 'ULinkAdmin_post_wkf_requete' %}"
+                enctype="multipart/form-data" 
+                data-role="validator">
+                {% csrf_token %}                                             
+                <input type="hidden" name="etape_id" value="{{ model.currentState }}">
+                <input type="hidden" name="doc_id" value="{{model.id}}">
+                
+                <button type="submit" class="btn btn-primary">Envoyer pour traitement</button>         
+            </form>
+        {% elif model.currentState == 2 %} <!-- Treated, waiting to upload file for Pay -->
+              
+              <form method="POST" action="{% url 'ULinkAdmin_post_wkf_requete' %}"
+              enctype="multipart/form-data" 
+              data-role="validator">
+                  {% csrf_token %}                        
+                  <!-- Si Upload, On affiche le bouton  -->   
+                  <input style="margin-bottom: 5px" type="file" name="file_upload" required="required">                              
+                  <input type="hidden" name="etape_id" value="{{model.currentState }}">
+                  <input type="hidden" name="doc_id" value="{{model.id}}">
+                  <input type="text" class="form-control" name="vat" id="vat" placeholder="Montant de la taxe déterminé (VAT) en CAD" required="required">
+                  
+                  <button type="submit" class="btn btn-primary mt-5">Uploader VDE23</button>     
+              </form>
+          
+            {% endif %}
+
+    </div>
+    </div>
+    <!-- End Panel -->
+  </div>

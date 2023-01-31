@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html class="no-js css-menubar" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap material admin template">
+    <meta name="author" content="">
+    
+    <title>{{ title }} | Cristal</title>
+    {% include 'ulinkpublic/shared/linkup.html' %}
+    
+  </head>
+  <body class="animsition {% if stylebody %} {{stylebody}} {% else %} dashboard {% endif %}">
+   
+    {% include 'ulinkpublic/shared/header.html' %}
+    <!-- Page -->
+    {% block page %}{% endblock %}
+    <!-- End Page -->
+  
+    {% include 'ulinkpublic/shared/linkbottom.html' %}
+   
+  </body>
+</html>

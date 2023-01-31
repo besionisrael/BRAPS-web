@@ -1,0 +1,47 @@
+.keypad {
+	width: 100%!important;
+	height: 100%!important;
+	border: 1px #000 solid!important;
+}
+.keypad .key{
+	width: 32%!important;
+	height: 60px!important;
+	font-size: 1.875rem!important;
+	line-height: 50px!important;
+}
+.clavier{
+	padding-top: 50px!important;
+}
+.grid .row > .cell {
+	margin: 0!important;
+}
+
+.erp-hidden {
+	display: none!important;
+}
+@media screen and (min-width: 1401px) {
+	.clavier{
+		padding-top: 60px!important;
+	}
+}
+@media screen and (max-width: 992px) {
+	.clavier{
+		padding-top: 40px!important;
+	}
+}
+@media screen and (max-width: 768px) {
+	.clavier{
+		padding-top: 30px!important;
+	}
+}
+@media screen and (max-width: 640px) {
+	.clavier{
+		padding-top: 20px!important;
+	}
+
+}
+@media screen and (max-width: 320px) {
+	.clavier{
+		padding-top: 10px!important;
+	}
+}

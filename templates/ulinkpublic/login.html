@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html class="no-js css-menubar" lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <title>{{title}}</title>
+    {% load static %}
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+<meta name="description" content="bootstrap admin template">
+<meta name="author" content="">
+
+<link rel="apple-touch-icon" href="{% static 'mood/base/assets/images/apple-touch-icon.png' %}">
+<link rel="shortcut icon" href="{% static 'mood/base/assets/images/favicon.ico' %}">
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="{% static 'mood/global/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/css/bootstrap-extend.min.css' %}">
+<link rel="stylesheet" href="{% static 'mood/base/assets/css/site.min.css' %}">
+
+<!-- Plugins -->
+<link rel="stylesheet" href="{% static 'mood/global/vendor/animsition/animsition.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/vendor/asscrollable/asScrollable.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/vendor/switchery/switchery.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/vendor/intro-js/introjs.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/vendor/slidepanel/slidePanel.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/vendor/flag-icon-css/flag-icon.css' %}">
+    <link rel="stylesheet" href="{% static 'mood/base/assets/examples/css/pages/register-v3.css' %}">
+    <link rel="stylesheet" href="{% static 'mood/global/vendor/waves/waves.css' %}">
+    <link rel="stylesheet" href="{% static 'mood/base/assets/examples/css/pages/login-v2.css' %}">
+
+
+<!-- Fonts -->
+<link rel="stylesheet" href="{% static 'mood/global/fonts/web-icons/web-icons.min.css' %}">
+<link rel="stylesheet" href="{% static 'mood/global/fonts/brand-icons/brand-icons.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'mood/global/fonts/material-design/material-design.min.css' %}">
+    
+<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+
+<!--[if lt IE 9]>
+<script src="{% static 'mood/assets/vendor/html5shiv/html5shiv.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 10]>
+<script src="{% static 'mood/assets/vendor/media-match/media.match.min.js"></script>
+<script src="{% static 'mood/assets/vendor/respond/respond.min.js"></script>
+<![endif]-->
+
+<!-- Scripts -->
+<script src="{% static 'mood/global/vendor/breakpoints/breakpoints.js' %}"></script>
+<style>
+  @media (min-width: 992px) {
+    .body-login {
+      background-image: url("{% static 'images/login_cover.jpg' %}");
+      
+    }
+   
+  }
+</style>
+    <script>
+      Breakpoints();
+    </script>
+    
+  </head>
+  <body class="animsition page-login-v2 layout-full page-dark body-login">
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <!-- Page -->
+     
+     
+     
+    
+    <div class="page" data-animsition-in="fade-in" data-animsition-out="fade-out">
+      <div class="page-content">
+        <div class="page-brand-info">
+          <div class="brand">
+            <img class="brand-img" src="{% static 'images/crystal2.png' %}" alt="..." style="width: 40%;">
+                        
+          </div>
+          <p class="font-size-20">Cristal, Traitement et Transparence</p>
+        </div>
+
+        <div class="page-login-main">
+          <div class="brand hidden-md-up">
+            <img class="brand-img" src="{% static 'images/crystal2.png' %}" alt="..." style="width: 40%;">
+            <h3 class="brand-text font-size-40">Cristal</h3>
+          </div>
+          <h3 class="font-size-24">Connectez-vous</h3>
+          <p>Utilisez vos accès pour vous connecter</p>
+          <!-- Appel de la fonction message -->
+          {% include 'ulinkpublic/shared/message.html' with messages=messages only %}
+
+          <form method="post" action="{% url 'ULinkPublic_post_connexion' %}" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group form-material floating" data-plugin="formMaterial">
+              <input type="email" class="form-control empty" id="inputEmail" name="email">
+              <label class="floating-label" for="inputEmail">Email</label>
+            </div>
+            <div class="form-group form-material floating" data-plugin="formMaterial">
+              <input type="password" class="form-control empty" id="inputPassword" name="password">
+              <label class="floating-label" for="inputPassword">Password</label>
+            </div>
+            <div class="form-group clearfix">
+              <div class="checkbox-custom checkbox-inline checkbox-primary float-left">
+                <input type="checkbox" id="remember" name="checkbox">
+                <label for="inputCheckbox">Se souvenir de moi</label>
+              </div>
+              <a class="float-right" href="forgot-password.html">Mot de passe oublié ?</a>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+          </form>
+
+         
+
+          <footer class="page-copyright">
+            <p>Preuve de concept </p>
+            <p>Revenu Québec</p>
+            <div class="social">
+              <a class="btn btn-icon btn-round social-twitter mx-5" href="javascript:void(0)">
+            <i class="icon bd-twitter" aria-hidden="true"></i>
+          </a>
+              <a class="btn btn-icon btn-round social-facebook mx-5" href="javascript:void(0)">
+            <i class="icon bd-facebook" aria-hidden="true"></i>
+          </a>
+              <a class="btn btn-icon btn-round social-google-plus mx-5" href="javascript:void(0)">
+            <i class="icon bd-google-plus" aria-hidden="true"></i>
+          </a>
+            </div>
+          </footer>
+        </div>
+
+      </div>
+    </div>
+    <!-- End Page -->
+
+
+    <script src="{% static 'mood/global/vendor/babel-external-helpers/babel-external-helpers.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/jquery/jquery.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/popper-js/umd/popper.min.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/bootstrap/bootstrap.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/animsition/animsition.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/mousewheel/jquery.mousewheel.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/asscrollbar/jquery-asScrollbar.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/waves/waves.js' %}"></script>
+        
+    
+    <!-- Plugins -->
+    <script src="{% static 'mood/global/vendor/switchery/switchery.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/intro-js/intro.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/screenfull/screenfull.js' %}"></script>
+    <script src="{% static 'mood/global/vendor/slidepanel/jquery-slidePanel.js' %}"></script>
+        <script src="{% static 'mood/global/vendor/jquery-placeholder/jquery.placeholder.js' %}"></script>
+    
+    <!-- Scripts -->
+    <script src="{% static 'mood/global/js/Component.js' %}"></script>
+    <script src="{% static 'mood/global/js/Plugin.js' %}"></script>
+    <script src="{% static 'mood/global/js/Base.js' %}"></script>
+    <script src="{% static 'mood/global/js/Config.js' %}"></script>
+    
+    <script src="{% static 'mood/base/assets/js/Section/Menubar.js' %}"></script>
+    <script src="{% static 'mood/base/assets/js/Section/Sidebar.js' %}"></script>
+    <script src="{% static 'mood/base/assets/js/Section/PageAside.js' %}"></script>
+    <script src="{% static 'mood/base/assets/js/Plugin/menu.js' %}"></script>
+    
+    <!-- Config -->
+    <script src="{% static 'mood/global/js/config/colors.js' %}"></script>
+    <script src="{% static 'mood/base/assets/js/config/tour.js' %}"></script>
+    <script>Config.set('assets', '../../base/assets');</script>
+    
+    <script src="{% static 'mood/base/assets/js/Site.js' %}"></script>
+    <script src="{% static 'mood/global/js/Plugin/asscrollable.js' %}"></script>
+    <script src="{% static 'mood/global/js/Plugin/slidepanel.js' %}"></script>
+    <script src="{% static 'mood/global/js/Plugin/switchery.js' %}"></script>
+        <script src="{% static 'mood/global/js/Plugin/jquery-placeholder.js' %}"></script>
+        <script src="{% static 'mood/global/js/Plugin/material.js' %}"></script>
+    <script>
+      (function(document, window, $){
+        'use strict';
+    
+        var Site = window.Site;
+        $(document).ready(function(){
+          Site.run();
+        });
+      })(document, window, jQuery);
+    </script>
+    
+  </body>
+</html>

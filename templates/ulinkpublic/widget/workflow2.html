@@ -1,0 +1,153 @@
+{% load humanize %} 
+<ul class="breadcrumbs2 small">
+        {% for item in historique %}
+            <li>
+                <a title="Employé : {{item.employe}} 
+Date : {{ item.timestamp|date:'M d, Y H:i'}}" href="#" style="{% if item.etape.designation == model.etat %}background: #9c28b1; {% endif %} hover: ba">{{item.etape.designation}}</a>
+            </li>
+        {% endfor %}
+    </ul>              
+    <div>
+        {% for item in etapes_suivantes %}
+            <!-- Ici on gère les différentes conditions de transition -->
+            {% for role in roles %}
+            {% if role.id == item.groupe_permission.id or item.groupe_permission == None %}
+
+            {% if item.condition.designation == "Link" %}
+                <!-- Si Link, On rédige vers le lien rattaché   
+                <script>
+                    window.location.assign("{{ item.condition.url }}")
+                </script>
+                -->
+
+                <form method="POST" action="{% url item.url %}"
+                enctype="multipart/form-data" 
+                    data-role="validator">
+                    {% csrf_token %}                        
+                    <!-- Si Upload, On affiche le bouton  -->                                 
+                    <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                    <input type="hidden" name="doc_id" value="{{model.id}}">
+                    <input type="hidden" name="service_referent_id" value="{{ service_referent_id }}">
+                    {% for ligne in lignes %}
+                    <input type="hidden" name="quantite_fournie" value="{{ ligne.quantite_fournie }}">
+                    <input type="hidden" name="ligne_id" value="{{ ligne.id }}">
+                    {% endfor %}
+                    <!--button type="submit" class="button small-button rounded primary">{{item.etape_destination.label}}</button--> 
+                    <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}}</button>         
+                </form>
+                
+            {% elif item.condition.designation == "LinkParam" %}
+                <!-- Si Link, On rédige vers le lien rattaché
+                <script>
+                    window.location.assign("{{ item.condition.url }}")
+                </script>
+                -->
+                <form method="POST" action="{% url item.url model.id %}"
+                enctype="multipart/form-data" 
+                data-role="validator">
+                    {% csrf_token %}                        
+                    <!-- Si Upload, On affiche le bouton  -->                                 
+                    <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                    <input type="hidden" name="doc_id" value="{{model.id}}">
+                    <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                    <input type="hidden" name="url_add" value="{{ url_add }}">
+                    <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}}</button>     
+                </form>
+                {% elif item.condition.designation == "Transition" %}
+            
+            {% else %}
+                <form method="POST" action="{% url 'backoffice_workflow_post' %}"
+                enctype="multipart/form-data" 
+                    data-role="validator">
+                    {% csrf_token %}                        
+                
+                    {% if item.condition.designation == "Upload" %} 
+                             <!-- Si Upload, On affiche le bouton  -->                                 
+                             <input style="margin-bottom: 5px" type="file" name="file_upload" required="required" multiple>
+                             <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                             <input type="hidden" name="doc_id" value="{{model.id}}">
+                             <input type="hidden" name="content_id" value="{{content_type_id}}">
+                            <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                            <input type="hidden" name="url_add" value="{{ url_add }}">
+                             <div>
+                                 <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}}</button>
+                             </div>
+                        </form>
+                    {% elif item.condition.designation == "Approval" %}
+                        <!-- Si Approval, On affiche le bouton  --> 
+                        <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                        <input type="hidden" name="doc_id" value="{{model.id}}">
+                        <input type="hidden" name="content_id" value="{{content_type_id}}">
+                        <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                        <input type="hidden" name="url_add" value="{{ url_add }}">
+                        <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}}</button>
+                        
+                    {% elif item.condition.designation == "Budget" %}
+                        <!-- Si Budget, On affiche le bouton que pour le responsable du code budgetaire -->
+                        {% if model.ligne_budgetaire.responsable.id == utilisateur.id %}
+                            <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                            <input type="hidden" name="doc_id" value="{{model.id}}">
+                            <input type="hidden" name="content_id" value="{{content_type_id}}">
+                            <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                            <input type="hidden" name="url_add" value="{{ url_add }}">
+                            <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}}</button>  
+                        {% endif %}
+                    {% elif item.condition.designation == "CodeBudget" %}
+                        <!-- Si CodeBudget, On affiche le bouton que pour le responsable d'un des codes budgetaires -->
+                        {% for code_budgetaire in model.codes_budgetaires.all %}
+                            {% if code_budgetaire.responsable.id == utilisateur.id and signee == False %}
+                                <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                                <input type="hidden" name="doc_id" value="{{model.id}}">
+                                <input type="hidden" name="content_id" value="{{content_type_id}}">
+                                <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                                <input type="hidden" name="url_add" value="{{ url_add }}">    
+                                <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}} {{ code_budgetaire.code }}</button>  
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                    
+                        <!-- Si Responsible, On affiche le bouton que pour le responsable du departement du demandeur -->                                
+                        {% if model.demandeur.unite_fonctionnelle.responsable.id == utilisateur.id %}
+                       
+                            <input type="hidden" name="etape_id" value="{{item.etape_destination_id}}">
+                            <input type="hidden" name="doc_id" value="{{model.id}}">
+                            <input type="hidden" name="content_id" value="{{content_type_id}}">
+                            <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                            <input type="hidden" name="url_add" value="{{ url_add }}">
+                            <button type="submit" class="theme-btn theme-btn-sm rounded primary_color_{{module.name|lower}} chargement-au-click primary_color_{{ module.name|lower }}">{{item.etape_destination.label}}</button> 
+                              
+                        {% endif %}
+                    {% endif %}
+                </form>
+                
+            {% endif %}
+            
+            {% endif %}            
+            
+            
+                {% endfor %}
+
+                <!--CONSULTER ANNULER--> 
+             {# if etapes_suivantes|length == forloop.counter #}
+			 {# if role.id == item.groupe_permission.id or model.demandeur.superieur_hierarchique.id == utilisateur.id #}
+                        {# if model.statut.est_decisive #}
+                    
+                            <!--form method="POST" 
+                            enctype="multipart/form-data" 
+                            action="{% url 'backoffice_cancel_workflow_post' %}">
+                                    {# csrf_token #}     
+                            <input type="hidden" name="doc_id" value="{{model.id}}">
+                            <input type="hidden" name="content_id" value="{{content_type_id}}">
+                            <input type="hidden" name="type_doc" value="{{ type_doc}}">
+                            <input type="hidden" name="url_add" value="{{ url_add }}">
+                            <input type="hidden" name="url_detail" value="{{ url_detail }}">
+                            <button type="submit" class="button rounded ">Annuler</button> 
+                            </form-->
+                            {# endif #}
+                    {# endif #}
+                {# endif #}
+
+                <!--CONSULTER ANNULER-->
+        {% endfor %}
+       
+    </div> 

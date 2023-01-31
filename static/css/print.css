@@ -1,0 +1,24 @@
+from django.template.loader import render_to_string
+from weasyprint import HTML, CSS
+from weasyprint.fonts import FontConfiguration
+import tempfile
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+
+def weasy_print(link, name, context):
+    html_string = render_to_string(link, context)
+    download_dir = settings.DOWNLOAD_DIR
+    css_dir = settings.CSS_DIR
+
+    font_config = FontConfiguration()
+    html = HTML(string=html_string)
+    css_print = CSS(os.path.join(css_dir,'print.css'), font_config=font_config)
+    pdf_file = html.write_pdf(target=os.path.join(download_dir, name), stylesheets=[css_print], font_config=font_config)
+
+    fs = FileSystemStorage(download_dir)
+    with fs.open(name) as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(context['title'])
+        return response

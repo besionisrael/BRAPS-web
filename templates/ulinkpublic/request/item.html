@@ -1,0 +1,191 @@
+
+{% extends "ulinkpublic/shared/layout.html" %} {% block page %} {% load static %}
+
+<!-- Page -->
+<style>
+  .example{
+    padding: 25% 15% 15% 15%;
+    background-color: #F3F7FA;
+  }
+  .ribbon {
+    position: absolute;
+    top: 19px;
+    left: 7%;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    background-color: transparent;
+}
+</style>
+
+</style>
+
+<div class="page">
+  <div class="page-content container-fluid">
+    <div class="row">
+        {% include 'ulinkpublic/widget/workflow.html' with utilisateur=utilisateur model=model  historique=model.transactions roles=roles csrf_token=csrf_token only %}
+            
+      <div class="col-lg-9">
+        <!-- Panel -->
+        <div class="panel">
+          <div class="panel-body nav-tabs-animate nav-tabs-horizontal" data-plugin="tabs">
+            <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+              <li class="nav-item" role="presentation"><a class="active nav-link" data-toggle="tab" href="#activities"
+                  aria-controls="activities" role="tab">Informations</a></li>
+              <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#profile" aria-controls="profile"
+                  role="tab">Historique<span class="badge badge-pill badge-danger">{{ documents.count}}</span></a></li>
+             
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane active animation-slide-left" id="activities" role="tabpanel">
+                
+               
+                <br>
+                <h4 class="profile-job" style="margin-bottom:5px">Numéro Requête</h4>
+                <h4 class="profile-user">{{ model.paperNumber }}</h4>
+                {% comment %} <br>
+                <h4 class="profile-job" style="margin-bottom:5px">Nom de Famille et Prénom</h4>
+                <h4 class="profile-user">{{ model.fullname }}</h4> {% endcomment %}
+                {% comment %} <br>
+                <h4 class="profile-job" style="margin-bottom:5px">NID</h4>
+                <h4 class="profile-user">{{ model.nid}}</h4> {% endcomment %}
+                <br>
+                <h4 class="profile-job" style="margin-bottom:5px">Status</h4>
+                <h4 class="profile-user" style="color:green">{{ model.valueCurrentState}}</h4>
+                <br>
+                <h4 class="profile-job" style="margin-bottom:5px">Hash récent</h4>
+                <h4 class="profile-user"><a  href="#hashpopup">{{ model.lastTransaction.hashTx }}</a></h4>
+                <br>
+                {% comment %} <h4 class="profile-job" style="margin-bottom:5px">NAS</h4>
+                <h4 class="profile-user">{{ model.nas }}</h4>
+                <br> {% endcomment %}
+
+                <div class="col-md-12">
+                  <!-- Panel Projects -->
+                  <div class="panel">
+
+                      <div class="table-responsive">
+                          <table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <td>#</td>
+                                      <td>Marque</td>
+                                      <td>Modèle</td>
+                                      <td>Année</td>
+                                      <td>N° Identification du Véhicule</td>
+                                      <td>N° plaque</td>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in lines %}
+                                  <tr>
+                                      <td>{{ forloop.counter }}</td>
+                                      <td>{{ item.brand }}</td>
+                                      <td>{{ item.model }}</td>
+                                      <td>{{ item.year }} </td>
+                                      <td>{{ item.carId }}</td>
+                                      <td>{{ item.plateId  }}</td>
+                                  </tr>
+                                  {% endfor %}
+
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                      <h3 class="panel-title" style="position: absolute ;top: 80%;right: 30px;">Nombre de véhicule: {{ model.nvh }} <span style="font-size: 26px;"> {{ model.value_total_general }}</span></h3>
+                  <!-- End Panel Projects -->
+                </div>
+                
+                
+              </div>
+
+              <div class="tab-pane animation-slide-left" id="profile" role="tabpanel">
+                {% if model.transactions.count <= 0 %}
+                <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)">Aucune information disponible</a>
+                {% endif %}
+                <div class="row">
+                  {% for item in model.transactions %}
+                  <div class="col-md-4">
+                    <div class="example">
+                      <div class="ribbon ribbon-bookmark">
+                        <a href="#"><span class="ribbon-inner" style='color:white'>{{ item.hashTx}}</span></a>
+                      </div><br>
+                      Txn: <code>{{ item.valueTxn }}</code><br>
+                      Operateur: <code>{{ item.newOperator }}</code><br>
+                      Date: <code>{{ item.createdAt|date:"d-M-Y" }}</code><br>
+                      Heure: <code>{{ item.createdAt|date:"H:i:s" }}</code><br>
+                    
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                
+              </div>
+
+              <div class="tab-pane animation-slide-left" id="messages" role="tabpanel">
+                <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)">Aucune information disponible</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Panel -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Page -->
+<script src="{% static 'mood/global/vendor/jquery/jquery.js' %}"></script>
+<script>
+
+$(document).ready(function() {
+  let isPopup = "{{ isPopup }}"
+  if (isPopup == "1"){
+    Swal.fire({
+            title: 'Opération effectuée',
+            text: "{{ model.lastTransaction.hashTx }}",
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Ok'
+          })
+
+  }
+  
+//   $('#hashpopup').on('click', function () {
+//   Swal.fire({
+//             title: 'Confimer',
+//             text: "Voulez-vous vraiment voir toutes les lignes ? Pour une grande table, cela pourrait faire planter le navigateur.",
+//             icon: 'success',
+//             showCancelButton: true,
+//             confirmButtonColor: '#3085d6',
+//             cancelButtonColor: '#d33',
+//             cancelButtonText: 'Annuler',
+//             confirmButtonText: 'Ok'
+//           })
+
+// });
+
+// $('a[href="#hashpopup"]').click(function(){
+//   Swal.fire({
+//             title: 'Confimer',
+//             text: "Voulez-vous vraiment voir toutes les lignes ? Pour une grande table, cela pourrait faire planter le navigateur.",
+//             icon: 'success',
+//             showCancelButton: true,
+//             confirmButtonColor: '#3085d6',
+//             cancelButtonColor: '#d33',
+//             cancelButtonText: 'Annuler',
+//             confirmButtonText: 'Ok'
+//           })
+// }); 
+
+
+});
+
+
+
+  
+</script>
+
+
+
+{% endblock %}

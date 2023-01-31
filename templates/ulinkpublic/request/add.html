@@ -1,0 +1,203 @@
+{% extends "ulinkpublic/shared/layout.html" %} {% block page %} {% load static %}
+<link rel="stylesheet" href="{% static 'mood/global/vendor/waves/waves.css' %}">
+<link rel="stylesheet" href="{% static 'mood/assets/examples/css/apps/contacts.css' %}">
+     <link rel="stylesheet" href="{% static 'mood/global/vendor/dropify/dropify.css' %}">
+
+<!-- Scripts -->
+<script src="{% static 'mood/global/vendor/breakpoints/breakpoints.js' %}"></script>
+<script>
+    Breakpoints();
+</script>
+
+<!-- Page -->
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">{{title}}</h1>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">{{title}}</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Ajouter</a></li>
+        </ol>
+       
+    </div>
+    <!-- Form Icons -->
+    <div class="container">
+        <div class="panel form-icons">
+            <div class="panel-heading">
+                <h3 class="panel-title">Renseignements sur le demandeur</h3>
+            </div>
+
+
+            <div class="panel-body container-fluid">
+                <div class="row">
+                    <form id="form" method="POST" action="{% url 'ULinkPublic_post_add_requete' %}" enctype="multipart/form-data" data-role="validator" data-show-required-state="false" data-hint-mode="line" data-hint-background="bg-red" data-hint-color="fg-white"
+                        data-hide-error="5000" novalidate="novalidate" data-on-error-input="notifyOnErrorInput" data-show-error-hint="false">
+                        {% csrf_token %}
+                        
+                        <div class="col-md-12 col-lg-12">
+                            <div class="panel row">
+                              
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group form-material">
+                                        <label class="form-control-label">Numéro d'identification</label>
+                                        <input type="text" class="form-control" name="nid" id="nid" required="required">
+                                        </div>
+                                            
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group form-material">
+                                        <label class="form-control-label">Numéro d'assurance sociale</label>
+                                        <input type="text" class="form-control" name="nas" id="nas" required="required">
+                                        </div>
+                                            
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group form-material">
+                                        <label class="form-control-label">Nom de famille </label>
+                                        <input type="text" class="form-control" name="lastname" id="lastname" required="required"
+                                        {% if utilisateur.last_name %} value="{{ utilisateur.last_name }}" {% endif %}>
+                                        </div>
+                                </div>
+                                
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group form-material">
+                                        <label class="form-control-label">Prénom </label>
+                                        <input type="text" class="form-control" name="firstname" id="firstname" required="required"
+                                        {% if utilisateur.first_name %} value="{{ utilisateur.first_name }}" {% endif %}>
+                                        </div>
+                                            
+                                </div>
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Renseignements sur les véhicules routiers</h3>
+                                </div>
+
+                                <div class="panel row">
+                                    <table class="table table-hover table-striped w-full"  >
+                                        <thead>
+                                        <tr>
+                                            <th width="20%">Marque</th>
+                                            <th width="20%">Modèle</th>
+                                            <th width="10%">Année</th>
+                                            <th width="30%">N° Identificaton du véhicule</th>
+                                            <th width="15%">Numéro de plaque</th>
+                                            <th width="5%"></th>
+                                        </tr>
+                                        </thead>
+                                       
+                                        <tbody id="items">
+                                            <tr id="ligne1">                                       
+                                                <th>
+                                                    <div class="form-group form-material">
+                                                        <input type="text" class="form-control" id="brand1" name="brand" required="required" placeholder="Saisissez la marque">
+                                                      </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group form-material">
+                                                        <input type="text" class="form-control" id="model1" name="model" required="required" placeholder="Saisissez le modèle">
+                                                      </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group form-material">
+                                                        <input type="text" class="form-control" id="year1" name="year" required="required" placeholder="Année">
+                                                      </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group form-material">
+                                                        <input type="text" class="form-control" id="carId1" name="carId" required="required" placeholder="Numéro d'indentification du Véhicule">
+                                                      </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group form-material">
+                                                        <input type="text" class="form-control" id="plateId1" name="plateId" required="required" placeholder="Numéro de plaque">
+                                                      </div>
+                                                </th>
+
+                                                <th>
+                                                    <div class="pagination no-border">
+                                                        <span class="item" title="Supprimer la ligne" onclick="supprimerLigne(1)"><i class="site-menu-icon fa fa-trash" aria-hidden="true"></i></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        
+                                        </tbody>
+                                        
+                                    </table>
+                                   </div>
+                                   <div class="panel row">
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-info mb-2" id="btnAjouterLigne">Ajouter une ligne</button>
+                                    </div>
+                                   
+                                </div>
+
+
+                                <div class="col-md-12 col-lg-12">
+                                    <!-- Example height -->
+                                    <div class="example-wrap">
+                                      <h4 class="example-title">Upload fichiers joints</h4>
+                                      <div class="example">
+                                        <input type="file" name="file_upload" id="input-file-now-custom-2" data-plugin="dropify" data-height="500"
+                                        />
+                                      </div>
+                                    </div>
+                                    <!-- End Example height -->
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-success mb-2" style="position: absolute ;top: 80%;right: 30px;">Enregistrer</button>
+                                </div>
+
+                            </div>                  
+
+                        </div>
+                    </form>
+                </div>
+            
+            </div>
+           
+    
+
+        </div>
+    </div>
+
+    <!-- End Form Icons -->
+</div>
+<!-- End Page -->
+
+<script type="text/javascript" src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
+<script>
+    // function enregistrer_piece(){
+    //     console.log("Enregistrer Piece");
+    //     document.getElementById('submit').click();
+    //     console.log("canPost");
+    // }
+    // function selectFile() {
+    //     $('input[id=input-excel]').click();
+    // }
+</script>
+
+<script>
+
+    var nombreLignes = 1;
+    var compteur = 1;
+    
+        $("#btnAjouterLigne").on("click", function () {
+            nombreLignes++;
+            compteur++;
+            var nouvelleLigne = '<tr id="ligne' + compteur +'"><th><div class="form-group form-material">';
+                nouvelleLigne += '<input type="text" class="form-control" id="brand' + compteur + '" name="brand" required="required" placeholder="Saisissez la marque"></div></th>';
+                nouvelleLigne += '<th><div class="form-group form-material"><input type="text" class="form-control" id="model' + compteur + '" name="model" required="required" placeholder="Saisissez le modèle"></div></th>';
+                nouvelleLigne += '<th><div class="form-group form-material"><input type="text" class="form-control" id="year' + compteur + '" name="year" required="required" placeholder="Année"></div></th><th>';
+                nouvelleLigne += '<div class="form-group form-material"><input type="text" class="form-control" id="carId' + compteur + '" name="carId" required="required" placeholder="Numéro d\'indentification du Véhicule"></div></th>';
+                nouvelleLigne += '<th><div class="form-group form-material"><input type="text" class="form-control" id="plateId' + compteur +'" name="plateId" required="required" placeholder="Numéro de plaque"></div></th>'; 
+                nouvelleLigne += '<th><div class="pagination no-border"><span class="item" title="Supprimer la ligne" onclick="supprimerLigne(' + compteur + ')"><i class="site-menu-icon fa fa-trash" aria-hidden="true"></i></span></div></td></tr>';        
+            $("#items").append(nouvelleLigne);
+            });
+    
+        function supprimerLigne(indice) {
+            nombreLignes--;
+            $("#ligne" + indice).remove();
+        }
+    
+    
+    </script>
+
+{% endblock %}

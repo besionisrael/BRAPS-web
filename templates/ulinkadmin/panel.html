@@ -1,0 +1,70 @@
+{% load static %}
+<header class="slidePanel-header" style="background-color:#F8F9FA;padding-bottom:0px">
+    <div class="slidePanel-actions" aria-label="actions" role="group">
+      <button type="button" class="btn btn-icon btn-pure btn-inverse slidePanel-close actions-top icon wb-close" 
+        style="color:blue" aria-hidden="true"></button>
+    </div>
+     <!--Workflow here -->
+     {% include 'ulinkadmin/widget/workflow.html' with utilisateur=utilisateur model=model historique=model.historics roles=roles csrf_token=csrf_token only %}
+     <!--Workflow here -->
+
+   
+    
+  </header>
+  <div class="slidePanel-inner">
+    <h1>{{ model.paperNumber }} </h1>
+    <p> {{ model.fullname }} - {{ model.issuer }} </p>
+
+    <section class="slidePanel-inner-section">
+      <div class="col-md-12">
+        <!-- Panel Projects -->
+        <div class="panel">
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>#</td>
+                            <td>Marque</td>
+                            <td>Modèle</td>
+                            <td>Année</td>
+                            <td>N° plaque</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in lines %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ item.brand }} </td>
+                            <td>{{ item.model }}</td>
+                            <td>{{ item.year }} </td>
+                            <td>{{ item.plateId }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      
+        <!-- End Panel Projects -->
+      </div>
+      <div class="mail-attachments">
+        <p><i Class="icon wb-paperclip"></i>Pièces jointes | <a href="javascript:void(0)"> Télécharger</a></p>
+        <ul class="list-group">
+          {% for item in files %}
+          <li class="list-group-item">
+            <span class="name">{{ item.docHash.created_at|date:'M d, Y H:i' }}</span>
+            <span class="size">(Etape: {{ item.valueTxn }})</span>
+            <button type="submit" class="btn btn-icon btn-pure btn-default" onclick="window.open('/static{{item.docHash.privateUrlDocument}}')" ><i class="icon wb-download" aria-hidden="true"></i></button>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+    
+
+    <div class="slidePanel-comment">
+      <button class="btn btn-danger slidePanel-close" data-dismiss="modal" type="button">Fermer</button>
+    </div>
+  </div>

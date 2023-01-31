@@ -1,0 +1,39 @@
+{% extends "ulinkpartner/shared/layout.html" %}
+{% block page %}
+{% load static %}
+
+<!-- Page -->
+<div class="page">
+    <div class="page-header">
+      <h1 class="page-title mb-10">Documents traités
+        {% comment %} <small>( 8 Articles )</small> {% endcomment %}
+      </h1>
+      
+    </div>
+
+    <div class="page-content">
+      
+
+      
+        <div class="documents-wrap articles">
+          <ul class="blocks blocks-100 blocks-xxl-4 blocks-lg-3 blocks-sm-2" data-plugin="matchHeight">
+            
+            {% for item in papers  %}
+              <li>
+                <div class="articles-item">
+                  <i class="icon wb-file" aria-hidden="true"></i>
+                  <h4 class="title"><a href="{% url 'ULinkPartner_item' item.paperNumber %}">{{ item.paperNumber }}</a></h4>
+                  <h5>{{ item.fullname }}</h5>
+                  <!--p>{{ item.fullname }}</p-->
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      
+    </div>
+  </div>
+
+
+
+{% endblock %}

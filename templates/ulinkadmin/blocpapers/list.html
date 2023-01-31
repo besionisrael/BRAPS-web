@@ -1,0 +1,94 @@
+{% extends "ulinkadmin/shared/layout.html" %}
+{% block page %}
+{% load static %}
+{% load mathfilters %}
+<link rel="stylesheet" href="{% static 'mood/topbar/assets/examples/css/apps/work.css' %}">
+
+<!-- Page -->
+<div class="app-work">
+  <div class="page">
+    <div class="page-content">
+      <div class="panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Chaine de blocs</h3>
+          <form class="panel-search-form" role="search">
+            <div class="input-search">
+              <i class="input-search-icon wb-search" aria-hidden="true"></i>
+              <input type="text" class="form-control" id="inputSearch" name="search" placeholder="Recherche...">
+              <i class="icon wb-loop"></i>
+            </div>
+          </form>
+
+          <ul class="panel-info">
+            <li>
+              <div class="num blue-600">{{ papers.count }}</div>
+              <p>Requêtes soumises sur la blockchain</p>
+            </li>
+            <!--li>
+              <div class="num orange-600">8</div>
+              <p>RQ</p>
+            </li>
+            <li>
+              <div class="num green-600">5</div>
+              <p>Hors RQ</p>
+            </li-->
+          </ul>
+        </div>
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Numéro de requête</th>
+                <th>Issuer</th>
+                <th>Progression</th>
+                <th>Détails</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in papers %}
+              <tr>
+                <td class="work-status">
+                  <span class="badge badge-primary">{{item.valueCurrentState}}</span>
+                </td>
+                <td class="subject">
+                  <div class="table-content">
+                    <p class="blue-grey-500">{{ item.paperNumber }}</p>
+                    <span class="blue-grey-400">{{ item.createDateTime|date:'M d, Y H:i' }}</span>
+                    <span class="badge badge-sm badge-primary">Recruiting</span>
+                  </div>
+                </td>
+                
+                <td class="subject">
+                  <div class="table-content">
+                    <p class="blue-grey-500">{{ item.issuer }}</p>
+                  </div>
+                </td>
+                <td class="work-progress">
+                  <div class="progress progress-xs table-content">
+                    <div class="progress-bar progress-bar-primary progress-bar-indicating" style="width:{{item.currentState|mul:25}}%"
+                      role="progressbar">
+                      <span class="sr-only">{{item.currentState|mul:25}}%</span>
+                    </div>
+                  </div>
+                  <span>{{item.currentState|mul:14}}%</span>
+                </td>
+                <td class="actions">
+                  <div class="table-content">
+                    <i class="icon wb-menu" data-url="{% url 'ULinkAdmin_blocpapers_item' item.id %}" data-toggle="slidePanel"></i>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-footer">
+            
+          </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

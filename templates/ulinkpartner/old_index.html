@@ -1,0 +1,177 @@
+{% extends "ulinkpartner/shared/layout.html" %}
+{% block page %}
+{% load static %}
+
+<div class="page bg-white">
+  <!-- Mailbox Sidebar -->
+  <div class="page-aside">
+    <div class="page-aside-switch">
+      <i class="icon wb-chevron-left" aria-hidden="true"></i>
+      <i class="icon wb-chevron-right" aria-hidden="true"></i>
+    </div>
+    <div class="page-aside-inner page-aside-scroll">
+      <div data-role="container">
+        <div data-role="content">
+          <div class="page-aside-section">
+            <div class="list-group">
+              <a class="list-group-item  {% if papers.label == 1 %} active {% endif %}" href="{% url 'ULinkPartner_accueil' %}?label=1">
+                <span class="badge badge-pill badge-danger">{{ papers.received.number }}</span>
+                <i class="icon wb-inbox" aria-hidden="true"></i> 
+                {{ papers.received.title }}
+              </a>
+              <a class="list-group-item {% if papers.label == 2 %} active {% endif %}" href="{% url 'ULinkPartner_accueil' %}?label=2">
+                <span class="badge badge-pill badge-info">{{ papers.sent.number }}</span>
+            <i class="icon wb-envelope" aria-hidden="true"></i>
+            {{ papers.sent.title }}
+          </a>
+              <a class="list-group-item {% if papers.label == 3 %} active {% endif %}" href="{% url 'ULinkPartner_accueil' %}?label=3">
+                <span class="badge badge-pill badge-info">{{ papers.completed.number }}</span>
+                <i class="icon wb-edit" aria-hidden="true"></i> 
+                {{ papers.completed.title }}
+              </a>
+
+              <a class="list-group-item {% if papers.label == 4 %} active {% endif %}" href="{% url 'ULinkPartner_accueil' %}?label=4">
+                <span class="badge badge-pill badge-info">{{ papers.all.number }}</span>
+                <i class="icon wb-edit" aria-hidden="true"></i>Tous
+              </a>
+
+              
+              
+            </div>
+          </div>
+          <div class="page-aside-section">
+            <h5 class="page-aside-title">LABEL</h5>
+            <div class="list-group has-actions">
+              <div class="list-group-item" data-plugin="editlist">
+                <div class="list-content">
+                  <i class="item-right wb-medium-point red-600" aria-hidden="true"></i>
+                  <span class="list-text">
+                   {{ papers.title }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mailbox Content -->
+  <div class="page-main">
+
+    <!-- Mailbox Header -->
+    <div class="page-header">
+      <h1 class="page-title">Requêtes VDE-23</h1>
+      <div class="page-header-actions">
+        <form>
+          <div class="input-search input-search-dark">
+            <i class="input-search-icon wb-search" aria-hidden="true"></i>
+            <input type="text" class="form-control" name="" placeholder="Recherche...">
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Mailbox Content -->
+    <div id="mailContent" class="page-content page-content-table" data-plugin="selectable">
+
+      <!-- Actions -->
+      <div class="page-content-actions">
+        <div class="float-right filter">
+          <span>Filtrer :</span>
+          <div class="dropdown">
+            <button type="button" class="btn btn-pure" data-toggle="dropdown" aria-expanded="false">
+              Tous
+              <span class="icon wb-chevron-down-mini" aria-hidden="true"></span>
+            </button>
+            {% comment %} <div class="dropdown-menu dropdown-menu-right animation-scale-up animation-top-right animation-duration-250"
+              role="menu">
+              <a class="dropdown-item" href="javascript:void(0)">Check read</a>
+              <a class="dropdown-item" href="javascript:void(0)">Check unread</a>
+          
+            </div> {% endcomment %}
+          </div>
+        </div>
+        <div class="actions-main">
+          
+          <div class="btn-group">
+            <div class="dropdown">
+              <button class="btn btn-icon btn-pure btn-default" data-toggle="dropdown" aria-expanded="false"
+                type="button"><i class="icon wb-folder" aria-hidden="true" data-toggle="tooltip"
+                  data-original-title="Folder" data-container="body" title=""></i></button>
+              {% comment %} <div class="dropdown-menu" role="menu">
+                <a class="dropdown-item" href="javascript:void(0)">work</a>
+                <a class="dropdown-item" href="javascript:void(0)">Family</a>
+                <a class="dropdown-item" href="javascript:void(0)">Private</a>
+                <a class="dropdown-item" href="javascript:void(0)">Friends</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0)">Trash</a>
+                <a class="dropdown-item" href="javascript:void(0)">Spam</a>
+              </div> {% endcomment %}
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+      <!-- Mailbox -->
+      <table id="mailboxTable" class="table" data-plugin="animateList" data-animate="fade"
+        data-child="tr">
+        <tbody>
+          {% if not papers.model %}
+          <a class="btn btn-block btn-default profile-readMore" href="#">Aucune demande</a>
+          {% endif  %}
+          {% for item in papers.model  %}
+          <tr id="mid_1" data-url="{% url 'ULinkPartner_item' item.id %}" data-toggle="slidePanel">
+            <td class="cell-60 responsive-hide">
+              <a class="avatar" href="javascript:void(0)">
+                <img class="img-fluid" src="{% static 'images/docs.png' %}" alt="...">
+              </a>
+            </td>
+            <td style="padding-left:25px">
+              <div class="content">
+                <div class="title">{{ item.paperNumber }}</div>
+                <div class="abstract">{{item.fullname}} - {{item.issuer}} </div>
+              </div>
+            </td>
+            <td class="cell-20 responsive-hide">
+            </td>
+            <td class="cell-140">
+              <div class="time" >{{item.created_at|timesince}}</div>
+              <div class="identity"><i class="icon wb-medium-point red-600" aria-hidden="true"></i>{{ item.valueCurrentState }}</div>
+            </td>
+          </tr>
+          {% endfor %}
+
+          
+
+
+        </tbody>
+      </table>
+      {% comment %} <!-- pagination -->
+      <ul data-plugin="paginator" data-total="50" data-skin="pagination-gap"></ul> {% endcomment %}
+    </div>
+  </div>
+</div>
+
+<div class="site-action" data-plugin="actionBtn">
+  <button type="button" data-action="add" class="site-action-toggle btn-raised btn btn-success btn-floating">
+    <i class="front-icon wb-pencil animation-scale-up" aria-hidden="true"></i>
+    <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i>
+  </button>
+  <div class="site-action-buttons">
+    <button type="button" data-action="trash" class="btn-raised btn btn-success btn-floating animation-slide-bottom">
+      <i class="icon wb-trash" aria-hidden="true"></i>
+    </button>
+    <button type="button" data-action="inbox" class="btn-raised btn btn-success btn-floating animation-slide-bottom">
+      <i class="icon wb-inbox" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}

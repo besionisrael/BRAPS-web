@@ -1,0 +1,45 @@
+{% load static %}
+
+<div class="col-xl-3 col-md-4">
+  <!-- Panel -->
+  <div class="panel">
+    <div class="panel-body">
+      <div class="list-group faq-list" role="tablist" >
+        {% for item in historique %}
+        <a title="Auteur : {{item.newOperator}} 
+        Date : {{ item.createdAt|date:'M d, Y H:i'}}" href="#" class="list-group-item active" data-toggle="tab" style="{% if item.txn != model.currentState %}background: grey; {% endif %} hover: ba"
+          role="tab"><i class="icon md-chevron-right font-size-16"></i> <span style="font-size:20px">{{item.valueTxn}} </span></a>
+          {% endfor %}       
+        
+      </div>
+    </div>
+    <div class="card-block">
+      {% if model.currentState == 1 %}  <!-- Created, waiting for Issuing -->
+           <form method="POST" action="{% url 'ULinkPublic_post_wkf_requete' %}"
+               enctype="multipart/form-data" 
+               data-role="validator">
+               {% csrf_token %}                                             
+               <input type="hidden" name="etape_id" value="{{ model.currentState }}">
+               <input type="hidden" name="doc_id" value="{{model.id}}">
+               
+               <button type="submit" class="btn btn-success">Soumettre</button>         
+           </form>
+       {% elif model.currentState == 4 %} <!-- Treated, waiting to upload file for Pay -->
+             
+             <form method="POST" action="{% url 'ULinkPublic_post_wkf_requete' %}"
+             enctype="multipart/form-data" 
+             data-role="validator">
+                 {% csrf_token %}                        
+                 <!-- Si Upload, On affiche le bouton  -->   
+                 <input style="margin-bottom: 5px" type="file" name="file_upload" required="required">                              
+                 <input type="hidden" name="etape_id" value="{{model.currentState }}">
+                 <input type="hidden" name="doc_id" value="{{model.id}}">
+                 <button type="submit" class="btn btn-success">Uploader preuve de paiement</button>     
+             </form>
+         
+           {% endif %}
+
+   </div>
+  </div>
+  <!-- End Panel -->
+</div>

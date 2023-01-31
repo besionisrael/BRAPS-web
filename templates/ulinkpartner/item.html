@@ -1,0 +1,108 @@
+{% extends "ulinkpartner/shared/layout.html" %}
+    {% block page %}
+    {% load static %}
+
+    <!-- Page -->
+    <div class="page">
+        <div class="page-header">
+          <h1 class="page-title">VDE-23</h1>
+        </div>
+  
+        <div class="page-content">
+          <!-- Panel -->
+          <div class="panel">
+            <div class="panel-body container-fluid">
+              <div class="row">
+                <div class="col-lg-3">
+                  <h3>
+                    <img class="mr-10" style="width:50px" src="{% static 'images/docs.png' %}"
+                      alt="...">{{ model.paperNumber }}</h3>
+                      Status: <a class="font-size-20" href="javascript:void(0)">{{ model.valueCurrentState }}</a>
+                </div>
+                <div class="col-lg-3 offset-lg-6 text-right">
+                  <h4>VDE-23</h4>
+                  <p>
+                    <a class="font-size-20" href="javascript:void(0)">#{{ model.paperNumber }}</a>
+                    <br>
+                    <span class="font-size-20">{{ model.fullname }}</span>
+                  </p>
+                  <address>
+                    {{ model.issuer }} 
+                  </address>
+                  <span>Date d'emission: {{ model.issueDateTime }}</span>
+                  <br>
+                  <span>Due Date: January 22, 2017</span>
+                </div>
+              </div>
+  
+              <div class="page-invoice-table table-responsive">
+                <table class="table table-hover text-right">
+                  <thead>
+                    <tr>
+                      <th class="text-center">#</th>
+                      <th>Marque</th>
+                      <th class="text-right">Modèle</th>
+                      <th class="text-right">Année</th>
+                      <th class="text-right">N° plaque</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in lines %}
+                    <tr>
+                      <td class="text-center">
+                        {{ forloop.counter }}
+                      </td>
+                      <td class="text-left">
+                        {{ item.brand }}
+                      </td>
+                      <td>
+                        {{ item.model }}
+                      </td>
+                      <td>
+                        {{ item.year }}
+                      </td>
+                      <td>
+                        {{ item.plateId }}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+  
+              <div class="text-right clearfix">
+                <div class="float-right">
+                  
+                  <p>VAT:
+                    <span>$ {{model.vat }}</span>
+                  </p>
+                </div>
+              </div>
+  
+              <div class="text-right">
+                
+                {% if model.currentState == 5 %}
+                <form method="post" action="{% url 'ULinkPartner_post_received' %}" autocomplete="off">
+                    {% csrf_token %}
+                    <input type="hidden" name="etape_id" value="{{ model.currentState }}">
+                    <input type="hidden" name="doc_id" value="{{model.id}}">
+                    <input type="hidden" name="paperNumber" value="{{model.paperNumber}}">
+                    <button type="submit" class="btn btn-animate btn-animate-side btn-primary">
+                    <span><i class="icon wb-shopping-cart" aria-hidden="true"></i> Marquer comme Receptionner</span>
+                    </button>
+                </form>
+                {% endif %}
+                <button type="button" class="btn btn-animate btn-animate-side btn-default btn-outline"
+                  onclick="javascript:window.print();">
+                  <span><i class="icon wb-print" aria-hidden="true"></i> Imprimer</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- End Panel -->
+        </div>
+      </div>
+      <!-- End Page -->
+  
+  
+  {% endblock %}
