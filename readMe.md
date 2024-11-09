@@ -96,9 +96,6 @@ python manage.py runserver 9000
   2. Use the `stableWithAuthentification` branch
   3. Update `settings.py` authentication configurations (line 165+)
 
-## Usage Guide
-
-A tutorial video demonstrating how to submit and process requests is available in the `Resources` folder of the proof of concept.
 
 ## Contributing
 
